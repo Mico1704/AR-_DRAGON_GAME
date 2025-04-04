@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AR Flying Dragon</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      overflow: hidden;
+    }
+
+    model-viewer {
+      width: 100vw;
+      height: 100vh;
+      background-color: black;
+    }
+
+    .controls {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background-color: crimson;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- AR Dragon Viewer -->
+  <model-viewer 
+    id="dragon"
+    src="https://modelviewer.dev/shared-assets/models/Dragon.glb"
+    alt="A flying dragon"
+    ar 
+    ar-modes="scene-viewer webxr quick-look"
+    camera-controls
+    autoplay
+    auto-rotate
+    exposure="1.2"
+    shadow-intensity="1"
+    animation-name="Fly"
+    environment-image="neutral"
+    interaction-prompt="none"
+    ios-src="https://modelviewer.dev/shared-assets/models/Dragon.usdz"
+  >
+  </model-viewer>
+
+  <!-- Fire Sound -->
+  <audio id="fire-sound" src="https://www.soundjay.com/mechanical/sounds/fire-burst-01.mp3" preload="auto"></audio>
+
+  <div class="controls">
+    <button onclick="breatheFire()">🔥 Breathe Fire</button>
+  </div>
+
+  <script>
+    const dragon = document.getElementById("dragon");
+    const fireSound = document.getElementById("fire-sound");
+
+    function breatheFire() {
+      // Play fire sound
+      fireSound.currentTime = 0;
+      fireSound.play();
+
+      // Play fire animation (if available)
+      const animations = dragon.availableAnimations;
+      if (animations.includes("Fire")) {
+        dragon.animationName = "Fire";
+        setTimeout(() => {
+          dragon.animationName = "Fly";
+        }, 3000); // Reset to flying after fire
+      } else {
+        console.log("No fire animation in this model.");
+      }
+    }
+  </script>
+</body>
+</html>
